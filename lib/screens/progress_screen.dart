@@ -1,13 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import '../data/mock_data.dart';
+import '../data/study_data.dart';
 import '../models/flashcard_model.dart';
 import '../theme/app_theme.dart';
 
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
 
-  // Mock 7-day study activity (cards reviewed per day)
   static const List<int> _weekActivity = [14, 8, 22, 18, 31, 25, 12];
   static const List<String> _weekDays = [
     'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
@@ -26,7 +25,7 @@ class ProgressScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 _buildStatsRow(context),
                 const SizedBox(height: 24),
-                _buildSectionTitle('Study Activity (Last 7 Days)'),
+                _buildSectionTitle('Study Activity'),
                 const SizedBox(height: 12),
                 _buildActivityChart(),
                 const SizedBox(height: 24),
@@ -48,19 +47,20 @@ class ProgressScreen extends StatelessWidget {
 
   SliverAppBar _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 130,
+      expandedHeight: 110,
       collapsedHeight: 60,
       pinned: true,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppTheme.primary,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          decoration: BoxDecoration(gradient: AppTheme.heroGradient),
+          color: AppTheme.primary,
           padding: const EdgeInsets.fromLTRB(24, 56, 24, 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Icon(Icons.insights_rounded, color: Colors.white, size: 28),
+              Icon(Icons.insights_rounded,
+                  color: AppTheme.accent, size: 26),
               const SizedBox(width: 10),
               const Column(
                 mainAxisSize: MainAxisSize.min,
@@ -69,21 +69,15 @@ class ProgressScreen extends StatelessWidget {
                   Text('Progress',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w900)),
                   Text('Track your learning journey',
-                      style: TextStyle(color: Colors.white70, fontSize: 13)),
+                      style: TextStyle(color: Colors.white54, fontSize: 13)),
                 ],
               ),
             ],
           ),
         ),
-        title: const Text('Progress',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: 18)),
-        titlePadding: const EdgeInsets.only(left: 56, bottom: 14),
       ),
     );
   }
@@ -109,22 +103,22 @@ class ProgressScreen extends StatelessWidget {
           icon: Icons.style_rounded,
           color: AppTheme.primary,
           label: 'Total Cards',
-          value: '${MockData.totalCards}'),
+          value: '${StudyData.totalCards}'),
       _StatItem(
           icon: Icons.verified_rounded,
           color: AppTheme.success,
           label: 'Mastered',
-          value: '${MockData.masteredCards}'),
+          value: '${StudyData.masteredCards}'),
       _StatItem(
           icon: Icons.local_fire_department_rounded,
           color: AppTheme.accent,
           label: 'Streak',
-          value: '${MockData.currentStreak}d'),
+          value: '${StudyData.currentStreak}d'),
       _StatItem(
           icon: Icons.school_rounded,
           color: AppTheme.secondary,
           label: 'Sessions',
-          value: '${MockData.totalStudySessions}'),
+          value: '${StudyData.totalStudySessions}'),
     ];
 
     return Padding(
@@ -133,8 +127,8 @@ class ProgressScreen extends StatelessWidget {
         children: stats
             .map((s) => Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(
-                        right: stats.last == s ? 0 : 8),
+                    padding:
+                        EdgeInsets.only(right: stats.last == s ? 0 : 8),
                     child: _buildStatCard(s),
                   ),
                 ))
@@ -148,19 +142,19 @@ class ProgressScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
       decoration: BoxDecoration(
         color: AppTheme.cardBg,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [AppTheme.cardShadow],
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppTheme.divider),
       ),
       child: Column(
         children: [
           Container(
-            width: 36,
-            height: 36,
+            width: 34,
+            height: 34,
             decoration: BoxDecoration(
-              color: item.color.withOpacity(0.12),
+              color: item.color.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(item.icon, color: item.color, size: 18),
+            child: Icon(item.icon, color: item.color, size: 16),
           ),
           const SizedBox(height: 6),
           Text(item.value,
@@ -180,8 +174,8 @@ class ProgressScreen extends StatelessWidget {
   }
 
   Widget _buildActivityChart() {
-    final maxY = (_weekActivity.reduce((a, b) => a > b ? a : b) * 1.25)
-        .roundToDouble();
+    final maxY =
+        (_weekActivity.reduce((a, b) => a > b ? a : b) * 1.25).roundToDouble();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -190,8 +184,8 @@ class ProgressScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 20, 20, 12),
         decoration: BoxDecoration(
           color: AppTheme.cardBg,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [AppTheme.cardShadow],
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.divider),
         ),
         child: BarChart(
           BarChartData(
@@ -199,8 +193,8 @@ class ProgressScreen extends StatelessWidget {
             gridData: FlGridData(
               show: true,
               drawVerticalLine: false,
-              getDrawingHorizontalLine: (_) => const FlLine(
-                  color: AppTheme.divider, strokeWidth: 1),
+              getDrawingHorizontalLine: (_) =>
+                  const FlLine(color: AppTheme.divider, strokeWidth: 1),
               horizontalInterval: maxY / 4,
             ),
             borderData: FlBorderData(show: false),
@@ -220,7 +214,9 @@ class ProgressScreen extends StatelessWidget {
                   showTitles: true,
                   getTitlesWidget: (val, meta) {
                     final i = val.toInt();
-                    if (i < 0 || i >= _weekDays.length) return const SizedBox();
+                    if (i < 0 || i >= _weekDays.length) {
+                      return const SizedBox();
+                    }
                     return Text(_weekDays[i],
                         style: const TextStyle(
                             color: AppTheme.textSecondary,
@@ -229,10 +225,10 @@ class ProgressScreen extends StatelessWidget {
                   },
                 ),
               ),
-              topTitles:
-                  const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              rightTitles:
-                  const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              topTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false)),
+              rightTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false)),
             ),
             barGroups: List.generate(
               _weekActivity.length,
@@ -241,14 +237,10 @@ class ProgressScreen extends StatelessWidget {
                 barRods: [
                   BarChartRodData(
                     toY: _weekActivity[i].toDouble(),
-                    gradient: LinearGradient(
-                      colors: [AppTheme.primary, AppTheme.secondary],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
+                    color: AppTheme.primary,
                     width: 22,
-                    borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(8)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(6)),
                   ),
                 ],
               ),
@@ -263,14 +255,12 @@ class ProgressScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
-        children: MockData.decks.map((deck) {
-          final color =
-              AppTheme.deckColors[deck.colorIndex % AppTheme.deckColors.length];
+        children: StudyData.decks.map((deck) {
+          final color = AppTheme
+              .deckColors[deck.colorIndex % AppTheme.deckColors.length];
           final accuracyPct = deck.cards.isEmpty
               ? 0
-              : (deck.cards
-                          .map((c) => c.accuracy)
-                          .reduce((a, b) => a + b) /
+              : (deck.cards.map((c) => c.accuracy).reduce((a, b) => a + b) /
                       deck.cards.length *
                       100)
                   .round();
@@ -280,8 +270,8 @@ class ProgressScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppTheme.cardBg,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [AppTheme.cardShadow],
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppTheme.divider),
             ),
             child: Row(
               children: [
@@ -289,11 +279,12 @@ class ProgressScreen extends StatelessWidget {
                   width: 42,
                   height: 42,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.15),
+                    color: color.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
-                    child: Text(deck.emoji, style: const TextStyle(fontSize: 20)),
+                    child:
+                        Text(deck.emoji, style: const TextStyle(fontSize: 20)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -318,12 +309,12 @@ class ProgressScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(3),
                         child: LinearProgressIndicator(
                           value: deck.progress,
-                          backgroundColor: color.withOpacity(0.15),
+                          backgroundColor: color.withOpacity(0.1),
                           valueColor: AlwaysStoppedAnimation<Color>(color),
-                          minHeight: 6,
+                          minHeight: 4,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -344,7 +335,7 @@ class ProgressScreen extends StatelessWidget {
 
   Widget _buildDifficultyDistribution() {
     int easy = 0, medium = 0, hard = 0;
-    for (final deck in MockData.decks) {
+    for (final deck in StudyData.decks) {
       for (final card in deck.cards) {
         switch (card.difficulty) {
           case CardDifficulty.easy:
@@ -367,8 +358,8 @@ class ProgressScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: AppTheme.cardBg,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [AppTheme.cardShadow],
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.divider),
         ),
         child: Column(
           children: [
@@ -376,22 +367,16 @@ class ProgressScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _DiffLabel(
-                    label: 'Easy',
-                    count: easy,
-                    color: AppTheme.success),
+                    label: 'Easy', count: easy, color: AppTheme.success),
                 _DiffLabel(
-                    label: 'Medium',
-                    count: medium,
-                    color: AppTheme.accent),
+                    label: 'Medium', count: medium, color: AppTheme.accent),
                 _DiffLabel(
-                    label: 'Hard',
-                    count: hard,
-                    color: AppTheme.error),
+                    label: 'Hard', count: hard, color: AppTheme.error),
               ],
             ),
             const SizedBox(height: 16),
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
               child: Row(
                 children: [
                   if (total > 0) ...[
@@ -418,7 +403,7 @@ class _DiffBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: flex == 0 ? 1 : flex,
-      child: Container(height: 16, color: color),
+      child: Container(height: 12, color: color),
     );
   }
 }
@@ -440,9 +425,12 @@ class _DiffLabel extends StatelessWidget {
         Text(label,
             style: const TextStyle(
                 color: AppTheme.textSecondary, fontSize: 12)),
+        const SizedBox(height: 4),
         Container(
-            width: 24, height: 4, decoration: BoxDecoration(
-            color: color, borderRadius: BorderRadius.circular(2))),
+            width: 24,
+            height: 3,
+            decoration: BoxDecoration(
+                color: color, borderRadius: BorderRadius.circular(2))),
       ],
     );
   }
