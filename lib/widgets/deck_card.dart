@@ -10,7 +10,8 @@ class DeckCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = AppTheme.deckColors[deck.colorIndex % AppTheme.deckColors.length];
+    final color =
+        AppTheme.deckColors[deck.colorIndex % AppTheme.deckColors.length];
     final progress = deck.progress;
 
     return GestureDetector(
@@ -18,97 +19,91 @@ class DeckCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.cardBg,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [AppTheme.cardShadow],
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.divider),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header strip
+            // Color accent bar at top
             Container(
-              height: 80,
+              height: 4,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [color, color.withOpacity(0.7)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: color,
                 borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20)),
+                    bottom: Radius.circular(4)),
               ),
-              child: Stack(
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Row(
                 children: [
-                  Positioned(
-                    right: -12,
-                    top: -12,
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.12),
-                        shape: BoxShape.circle,
-                      ),
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Center(
+                      child:
+                          Text(deck.emoji, style: const TextStyle(fontSize: 22)),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: Row(
-                      children: [
-                        Text(deck.emoji, style: const TextStyle(fontSize: 30)),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.25),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '${deck.totalCards} cards',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ],
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${deck.totalCards}',
+                      style: TextStyle(
+                          color: color,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800),
                     ),
                   ),
                 ],
               ),
             ),
-            // Content
             Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Text(
+                deck.name,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 14,
+                    color: AppTheme.textPrimary),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+              child: Text(
+                deck.description,
+                style: const TextStyle(
+                    color: AppTheme.textSecondary, fontSize: 11),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    deck.name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 14,
-                        color: AppTheme.textPrimary),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    deck.description,
-                    style: const TextStyle(
-                        color: AppTheme.textSecondary, fontSize: 11),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 12),
-                  // Progress bar
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(3),
                     child: LinearProgressIndicator(
                       value: progress,
                       backgroundColor: AppTheme.divider,
                       valueColor: AlwaysStoppedAnimation<Color>(color),
-                      minHeight: 5,
+                      minHeight: 4,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -123,20 +118,12 @@ class DeckCard extends StatelessWidget {
                             fontWeight: FontWeight.w700),
                       ),
                       if (deck.dueCards > 0)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: AppTheme.accent.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            '${deck.dueCards} due',
-                            style: const TextStyle(
-                                color: AppTheme.accent,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700),
-                          ),
+                        Text(
+                          '${deck.dueCards} due',
+                          style: const TextStyle(
+                              color: AppTheme.accent,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700),
                         ),
                     ],
                   ),
