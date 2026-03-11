@@ -47,8 +47,7 @@ class _StudySessionScreenState extends State<StudySessionScreen>
   }
 
   Flashcard get _currentCard => widget.deck.cards[_currentIndex];
-  bool get _isComplete =>
-      _currentIndex >= widget.deck.cards.length;
+  bool get _isComplete => _currentIndex >= widget.deck.cards.length;
   Color get _deckColor =>
       AppTheme.deckColors[widget.deck.colorIndex % AppTheme.deckColors.length];
 
@@ -184,14 +183,14 @@ class _StudySessionScreenState extends State<StudySessionScreen>
           ),
           const SizedBox(height: 8),
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(3),
             child: LinearProgressIndicator(
               value: total == 0
                   ? 0
                   : _currentIndex.clamp(0, total) / total,
               backgroundColor: AppTheme.divider,
               valueColor: AlwaysStoppedAnimation<Color>(_deckColor),
-              minHeight: 6,
+              minHeight: 4,
             ),
           ),
         ],
@@ -219,7 +218,8 @@ class _StudySessionScreenState extends State<StudySessionScreen>
         builder: (_, child) {
           final offset = _animatingOut
               ? _slideAnim.value
-              : Offset(_dragOffset.dx / MediaQuery.of(context).size.width, 0);
+              : Offset(
+                  _dragOffset.dx / MediaQuery.of(context).size.width, 0);
           final opacity = _animatingOut ? _fadeAnim.value : 1.0;
           final tilt = offset.dx * 0.04;
 
@@ -239,18 +239,19 @@ class _StudySessionScreenState extends State<StudySessionScreen>
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Stack(
             children: [
-              // Feedback label overlay
               if (_dragOffset.dx > 40)
                 Positioned(
                   top: 24,
                   left: 24,
-                  child: _FeedbackLabel(label: 'KNOW', color: AppTheme.success),
+                  child: _FeedbackLabel(
+                      label: 'KNOW', color: AppTheme.success),
                 ),
               if (_dragOffset.dx < -40)
                 Positioned(
                   top: 24,
                   right: 24,
-                  child: _FeedbackLabel(label: 'SKIP', color: AppTheme.error),
+                  child: _FeedbackLabel(
+                      label: 'SKIP', color: AppTheme.error),
                 ),
               SizedBox(
                 height: double.infinity,
@@ -260,7 +261,8 @@ class _StudySessionScreenState extends State<StudySessionScreen>
                   hint: _currentCard.hint,
                   color: _deckColor,
                   isFlipped: _isFlipped,
-                  onFlip: () => setState(() => _isFlipped = !_isFlipped),
+                  onFlip: () =>
+                      setState(() => _isFlipped = !_isFlipped),
                 ),
               ),
             ],
@@ -282,12 +284,14 @@ class _StudySessionScreenState extends State<StudySessionScreen>
                   color: AppTheme.error, size: 20),
               label: const Text('Skip',
                   style: TextStyle(
-                      color: AppTheme.error, fontWeight: FontWeight.w700)),
+                      color: AppTheme.error,
+                      fontWeight: FontWeight.w700)),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                side: const BorderSide(color: AppTheme.error, width: 1.5),
+                side: const BorderSide(
+                    color: AppTheme.error, width: 1.5),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                    borderRadius: BorderRadius.circular(12)),
               ),
             ),
           ),
@@ -301,9 +305,10 @@ class _StudySessionScreenState extends State<StudySessionScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.success,
                 foregroundColor: Colors.white,
+                elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                    borderRadius: BorderRadius.circular(12)),
               ),
             ),
           ),
@@ -324,16 +329,9 @@ class _StudySessionScreenState extends State<StudySessionScreen>
           Container(
             width: 100,
             height: 100,
-            decoration: BoxDecoration(
-              gradient: AppTheme.heroGradient,
+            decoration: const BoxDecoration(
+              color: AppTheme.primary,
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primary.withOpacity(0.35),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
-                ),
-              ],
             ),
             child: Center(
               child: Text('$score%',
@@ -346,7 +344,7 @@ class _StudySessionScreenState extends State<StudySessionScreen>
           const SizedBox(height: 24),
           const Text('Session Complete!',
               style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 24,
                   fontWeight: FontWeight.w900,
                   color: AppTheme.textPrimary)),
           const SizedBox(height: 8),
@@ -395,9 +393,10 @@ class _StudySessionScreenState extends State<StudySessionScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primary,
                 foregroundColor: Colors.white,
+                elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(14)),
                 textStyle: const TextStyle(
                     fontWeight: FontWeight.w700, fontSize: 15),
               ),
@@ -410,18 +409,21 @@ class _StudySessionScreenState extends State<StudySessionScreen>
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => QuizModeScreen(deck: widget.deck)),
+                    builder: (_) =>
+                        QuizModeScreen(deck: widget.deck)),
               ),
-              icon: const Icon(Icons.quiz_rounded, color: AppTheme.secondary),
+              icon: const Icon(Icons.quiz_rounded,
+                  color: AppTheme.secondary),
               label: const Text('Try Quiz Mode',
                   style: TextStyle(
                       color: AppTheme.secondary,
                       fontWeight: FontWeight.w700)),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                side: const BorderSide(color: AppTheme.secondary, width: 1.5),
+                side: const BorderSide(
+                    color: AppTheme.secondary, width: 1.5),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                    borderRadius: BorderRadius.circular(14)),
               ),
             ),
           ),
@@ -448,8 +450,8 @@ class _FeedbackLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(10),
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: color, width: 2),
       ),
       child: Text(label,
@@ -481,9 +483,9 @@ class _ResultBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.25)),
+          color: color.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: color.withOpacity(0.2)),
         ),
         child: Column(
           children: [
