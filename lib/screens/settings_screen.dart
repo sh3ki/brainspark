@@ -58,7 +58,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         value: _autoFlipSeconds,
                         min: 2,
                         max: 15,
-                        onChanged: (v) => setState(() => _autoFlipSeconds = v),
+                        onChanged: (v) =>
+                            setState(() => _autoFlipSeconds = v),
                         color: AppTheme.secondary,
                       ),
                   ],
@@ -76,8 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       value: _dailyReminder,
                       onChanged: (v) => setState(() => _dailyReminder = v),
                     ),
-                    if (_dailyReminder)
-                      _buildTimeTile(context),
+                    if (_dailyReminder) _buildTimeTile(context),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -90,16 +90,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         iconColor: AppTheme.textSecondary,
                         label: 'Version',
                         value: '1.0.0'),
-                    _buildInfoTile(
-                        icon: Icons.flutter_dash_rounded,
-                        iconColor: const Color(0xFF027DFD),
-                        label: 'Built With',
-                        value: 'Flutter 3.24'),
-                    _buildInfoTile(
-                        icon: Icons.work_rounded,
-                        iconColor: AppTheme.primary,
-                        label: 'Category',
-                        value: 'Portfolio Project'),
                     _buildInfoTile(
                         icon: Icons.palette_rounded,
                         iconColor: AppTheme.secondary,
@@ -120,19 +110,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   SliverAppBar _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: 110,
       collapsedHeight: 60,
       pinned: true,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppTheme.primary,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          decoration: BoxDecoration(gradient: AppTheme.heroGradient),
+          color: AppTheme.primary,
           padding: const EdgeInsets.fromLTRB(24, 56, 24, 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Icon(Icons.settings_rounded, color: Colors.white, size: 28),
+              Icon(Icons.settings_rounded,
+                  color: AppTheme.accent, size: 26),
               const SizedBox(width: 10),
               const Column(
                 mainAxisSize: MainAxisSize.min,
@@ -141,19 +132,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Text('Settings',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w900)),
                   Text('Personalize your experience',
-                      style: TextStyle(color: Colors.white70, fontSize: 13)),
+                      style:
+                          TextStyle(color: Colors.white54, fontSize: 13)),
                 ],
               ),
             ],
           ),
         ),
-        title: const Text('Settings',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
-        titlePadding: const EdgeInsets.only(left: 56, bottom: 14),
       ),
     );
   }
@@ -163,32 +151,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.heroGradient,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-                color: AppTheme.primary.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 8))
-          ],
+          color: AppTheme.primary,
+          borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
             Container(
-              width: 64,
-              height: 64,
+              width: 56,
+              height: 56,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withOpacity(0.12),
                 shape: BoxShape.circle,
-                border: Border.all(
-                    color: Colors.white.withOpacity(0.4), width: 2),
               ),
               child: const Center(
                 child: Text('AJ',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.w900)),
               ),
             ),
@@ -200,16 +180,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const Text('Alex Johnson',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.w900)),
-                  const Text('alex.johnson@example.com',
-                      style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  const SizedBox(height: 2),
+                  Text('alex.johnson@example.com',
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.5),
+                          fontSize: 12)),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      _ProfileBadge(label: '40 Cards', icon: Icons.style_rounded),
+                      _ProfileBadge(
+                          label: '40 Cards',
+                          icon: Icons.style_rounded),
                       const SizedBox(width: 8),
-                      _ProfileBadge(label: '5d Streak', icon: Icons.local_fire_department_rounded),
+                      _ProfileBadge(
+                          label: '5d Streak',
+                          icon:
+                              Icons.local_fire_department_rounded),
                     ],
                   ),
                 ],
@@ -246,8 +234,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Container(
             decoration: BoxDecoration(
               color: AppTheme.cardBg,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [AppTheme.cardShadow],
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppTheme.divider),
             ),
             child: Column(children: children),
           ),
@@ -272,7 +260,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withOpacity(0.08),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: iconColor, size: 18),
@@ -312,7 +300,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: AppTheme.primary.withOpacity(0.1),
+              color: AppTheme.primary.withOpacity(0.08),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.format_list_numbered_rounded,
@@ -335,7 +323,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
               color: AppTheme.surface,
               borderRadius: BorderRadius.circular(10),
@@ -386,7 +375,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.only(left: 50),
             child: Text(label,
                 style: TextStyle(
-                    color: color, fontWeight: FontWeight.w700, fontSize: 12)),
+                    color: color,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12)),
           ),
           Slider(
             value: value,
@@ -410,7 +401,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: AppTheme.primary.withOpacity(0.1),
+              color: AppTheme.primary.withOpacity(0.08),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.access_time_rounded,
@@ -452,7 +443,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: AppTheme.primary.withOpacity(0.1),
+                color: AppTheme.primary.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
@@ -483,7 +474,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withOpacity(0.08),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: iconColor, size: 18),
@@ -509,22 +500,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildFooter() {
     return Column(
       children: [
-        const AppLogo(size: 48, showText: true),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          decoration: BoxDecoration(
-            gradient: AppTheme.heroGradient,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Text('Portfolio Project',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12)),
-        ),
+        const AppLogo(size: 40, showText: true),
         const SizedBox(height: 8),
-        const Text('Built with Flutter & Material 3',
+        const Text('v1.0.0',
             style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
       ],
     );
@@ -542,17 +520,17 @@ class _ProfileBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Colors.white, size: 12),
+          Icon(icon, color: Colors.white60, size: 12),
           const SizedBox(width: 4),
           Text(label,
               style: const TextStyle(
-                  color: Colors.white,
+                  color: Colors.white60,
                   fontSize: 11,
                   fontWeight: FontWeight.w600)),
         ],
