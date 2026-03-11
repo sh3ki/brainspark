@@ -22,43 +22,17 @@ class AppLogo extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            gradient: AppTheme.heroGradient,
-            borderRadius: BorderRadius.circular(size * 0.28),
-            boxShadow: [
-              BoxShadow(
-                color: AppTheme.primary.withOpacity(0.4),
-                blurRadius: 14,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            color: lightText
+                ? Colors.white.withOpacity(0.12)
+                : AppTheme.primary,
+            borderRadius: BorderRadius.circular(size * 0.24),
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Icon(
-                Icons.psychology_rounded,
-                color: Colors.white,
-                size: size * 0.62,
-              ),
-              Positioned(
-                bottom: size * 0.08,
-                right: size * 0.08,
-                child: Container(
-                  width: size * 0.28,
-                  height: size * 0.28,
-                  decoration: BoxDecoration(
-                    color: AppTheme.accent,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.5),
-                  ),
-                  child: Icon(
-                    Icons.bolt_rounded,
-                    color: Colors.white,
-                    size: size * 0.18,
-                  ),
-                ),
-              ),
-            ],
+          child: Center(
+            child: Icon(
+              Icons.bolt_rounded,
+              color: AppTheme.accent,
+              size: size * 0.55,
+            ),
           ),
         ),
         if (showText) ...[
@@ -69,8 +43,7 @@ class AppLogo extends StatelessWidget {
                 TextSpan(
                   text: 'Brain',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: size * 0.46,
+                    fontSize: size * 0.42,
                     fontWeight: FontWeight.w900,
                     color: lightText ? Colors.white : AppTheme.textPrimary,
                     letterSpacing: -0.5,
@@ -79,10 +52,9 @@ class AppLogo extends StatelessWidget {
                 TextSpan(
                   text: 'Spark',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: size * 0.46,
+                    fontSize: size * 0.42,
                     fontWeight: FontWeight.w500,
-                    color: lightText ? Colors.white70 : AppTheme.primary,
+                    color: lightText ? Colors.white70 : AppTheme.accent,
                   ),
                 ),
               ],
