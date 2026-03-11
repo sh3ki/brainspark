@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../data/mock_data.dart';
+import '../data/study_data.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_logo.dart';
 import '../widgets/deck_card.dart';
@@ -11,14 +11,14 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final decks = MockData.decks;
+    final decks = StudyData.decks;
 
     return Scaffold(
       backgroundColor: AppTheme.surface,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(),
-          _buildHeroBanner(),
+          _buildStatsRow(),
           _buildSectionHeader('Your Decks', '${decks.length} decks'),
           _buildDeckGrid(context, decks),
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
@@ -52,73 +52,33 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroBanner() {
+  Widget _buildStatsRow() {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: AppTheme.heroGradient,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: AppTheme.primary.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(22),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Keep it up! 🔥',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${MockData.currentStreak}-day streak',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 26,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        _StatChip(
-                            label: '${MockData.masteredCards} mastered',
-                            icon: Icons.star_rounded),
-                        const SizedBox(width: 8),
-                        _StatChip(
-                            label: '${MockData.totalStudySessions} sessions',
-                            icon: Icons.history_edu_rounded),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.local_fire_department_rounded,
-                    color: Colors.amber, size: 36),
-              ),
-            ],
-          ),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+        child: Row(
+          children: [
+            _StatTile(
+              icon: Icons.local_fire_department_rounded,
+              iconColor: AppTheme.accent,
+              value: '${StudyData.currentStreak}',
+              label: 'Day Streak',
+            ),
+            const SizedBox(width: 10),
+            _StatTile(
+              icon: Icons.star_rounded,
+              iconColor: AppTheme.success,
+              value: '${StudyData.masteredCards}',
+              label: 'Mastered',
+            ),
+            const SizedBox(width: 10),
+            _StatTile(
+              icon: Icons.history_edu_rounded,
+              iconColor: AppTheme.secondary,
+              value: '${StudyData.totalStudySessions}',
+              label: 'Sessions',
+            ),
+          ],
         ),
       ),
     );
@@ -127,7 +87,7 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildSectionHeader(String title, String subtitle) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+        padding: const EdgeInsets.fromLTRB(20, 28, 20, 14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -155,9 +115,9 @@ class DashboardScreen extends StatelessWidget {
       sliver: SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.78,
-          crossAxisSpacing: 14,
-          mainAxisSpacing: 14,
+          childAspectRatio: 0.82,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, i) => AnimationConfiguration.staggeredGrid(
@@ -187,31 +147,62 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class _StatChip extends StatelessWidget {
-  final String label;
+class _StatTile extends StatelessWidget {
   final IconData icon;
+  final Color iconColor;
+  final String value;
+  final String label;
 
-  const _StatChip({required this.label, required this.icon});
+  const _StatTile({
+    required this.icon,
+    required this.iconColor,
+    required this.value,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: Colors.white, size: 13),
-          const SizedBox(width: 5),
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700)),
-        ],
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        decoration: BoxDecoration(
+          color: AppTheme.cardBg,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppTheme.divider),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: iconColor, size: 18),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(value,
+                      style: TextStyle(
+                          color: iconColor,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 17)),
+                  Text(label,
+                      style: const TextStyle(
+                          color: AppTheme.textSecondary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
