@@ -45,7 +45,6 @@ class _QuizModeScreenState extends State<QuizModeScreen>
     if (allCards.length < 2) return [];
 
     return allCards.map((card) {
-      // Get 3 wrong answers from other cards
       final others = allCards.where((c) => c.id != card.id).toList()
         ..shuffle(_rng);
       final wrongAnswers = others.take(3).map((c) => c.back).toList();
@@ -155,9 +154,10 @@ class _QuizModeScreenState extends State<QuizModeScreen>
                 overflow: TextOverflow.ellipsis),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppTheme.primary.withOpacity(0.12),
+              color: AppTheme.primary.withOpacity(0.08),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -193,12 +193,12 @@ class _QuizModeScreenState extends State<QuizModeScreen>
           ),
           const SizedBox(height: 8),
           ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(3),
             child: LinearProgressIndicator(
               value: _questionIndex / _questions.length,
               backgroundColor: AppTheme.divider,
               valueColor: AlwaysStoppedAnimation<Color>(_deckColor),
-              minHeight: 6,
+              minHeight: 4,
             ),
           ),
         ],
@@ -212,19 +212,8 @@ class _QuizModeScreenState extends State<QuizModeScreen>
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [_deckColor, _deckColor.withOpacity(0.75)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: _deckColor.withOpacity(0.3),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
+          color: _deckColor,
+          borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -232,7 +221,7 @@ class _QuizModeScreenState extends State<QuizModeScreen>
           children: [
             const Text('QUESTION',
                 style: TextStyle(
-                    color: Colors.white70,
+                    color: Colors.white60,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.5)),
@@ -257,7 +246,7 @@ class _QuizModeScreenState extends State<QuizModeScreen>
                     child: Text(
                       _current.hint!,
                       style: const TextStyle(
-                          color: Colors.white70,
+                          color: Colors.white60,
                           fontSize: 12,
                           fontStyle: FontStyle.italic),
                     ),
@@ -282,8 +271,9 @@ class _QuizModeScreenState extends State<QuizModeScreen>
             text: _current.options[i],
             isSelected: _selectedAnswer == i,
             isCorrect: _answered && i == _current.correctIndex,
-            isWrong:
-                _answered && _selectedAnswer == i && i != _current.correctIndex,
+            isWrong: _answered &&
+                _selectedAnswer == i &&
+                i != _current.correctIndex,
             onTap: () => _selectAnswer(i),
           ),
         ),
@@ -301,15 +291,18 @@ class _QuizModeScreenState extends State<QuizModeScreen>
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: _nextQuestion,
-            icon: Icon(isLast ? Icons.emoji_events_rounded : Icons.arrow_forward_rounded),
+            icon: Icon(isLast
+                ? Icons.emoji_events_rounded
+                : Icons.arrow_forward_rounded),
             label: Text(isLast ? 'See Results' : 'Next Question',
                 style: const TextStyle(fontWeight: FontWeight.w700)),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primary,
               foregroundColor: Colors.white,
+              elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(14)),
             ),
           ),
         ),
@@ -321,12 +314,12 @@ class _QuizModeScreenState extends State<QuizModeScreen>
     final total = _questions.length;
     final pct = total == 0 ? 0 : (_score / total * 100).round();
     final grade = pct >= 90
-        ? 'Excellent! 🎉'
+        ? 'Excellent!'
         : pct >= 70
-            ? 'Good Job! 👍'
+            ? 'Good Job!'
             : pct >= 50
-                ? 'Keep Practicing 💪'
-                : 'Need More Study 📚';
+                ? 'Keep Practicing'
+                : 'Need More Study';
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -337,14 +330,8 @@ class _QuizModeScreenState extends State<QuizModeScreen>
             width: 110,
             height: 110,
             decoration: BoxDecoration(
-              gradient: AppTheme.heroGradient,
+              color: AppTheme.primary,
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                    color: AppTheme.primary.withOpacity(0.35),
-                    blurRadius: 24,
-                    offset: const Offset(0, 8))
-              ],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -356,7 +343,7 @@ class _QuizModeScreenState extends State<QuizModeScreen>
                         fontWeight: FontWeight.w900)),
                 const Text('SCORE',
                     style: TextStyle(
-                        color: Colors.white70,
+                        color: Colors.white54,
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.5)),
@@ -414,10 +401,10 @@ class _QuizModeScreenState extends State<QuizModeScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primary,
                 foregroundColor: Colors.white,
+                elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                textStyle: const TextStyle(fontWeight: FontWeight.w700),
+                    borderRadius: BorderRadius.circular(14)),
               ),
             ),
           ),
@@ -465,8 +452,8 @@ class _OptionTile extends StatelessWidget {
   });
 
   Color get _bgColor {
-    if (isCorrect) return AppTheme.success.withOpacity(0.12);
-    if (isWrong) return AppTheme.error.withOpacity(0.12);
+    if (isCorrect) return AppTheme.success.withOpacity(0.08);
+    if (isWrong) return AppTheme.error.withOpacity(0.08);
     return AppTheme.cardBg;
   }
 
@@ -487,9 +474,8 @@ class _OptionTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           color: _bgColor,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: _borderColor, width: 1.5),
-          boxShadow: [AppTheme.cardShadow],
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
@@ -524,8 +510,9 @@ class _OptionTile extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyle(
-                  fontWeight:
-                      isCorrect || isWrong ? FontWeight.w700 : FontWeight.w500,
+                  fontWeight: isCorrect || isWrong
+                      ? FontWeight.w700
+                      : FontWeight.w500,
                   fontSize: 13,
                   color: isCorrect
                       ? AppTheme.success
@@ -563,9 +550,9 @@ class _ResultCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.25)),
+          color: color.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: color.withOpacity(0.2)),
         ),
         child: Column(
           children: [
@@ -573,7 +560,9 @@ class _ResultCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(value,
                 style: TextStyle(
-                    color: color, fontWeight: FontWeight.w900, fontSize: 18)),
+                    color: color,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 18)),
             Text(label,
                 style: const TextStyle(
                     color: AppTheme.textSecondary, fontSize: 11)),
