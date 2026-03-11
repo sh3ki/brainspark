@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/mock_data.dart';
+import '../data/study_data.dart';
 import '../models/flashcard_model.dart';
 import '../theme/app_theme.dart';
 
@@ -25,9 +25,10 @@ class _CreateCardScreenState extends State<CreateCardScreen>
   @override
   void initState() {
     super.initState();
-    _previewCtrl =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 400));
-    _previewAnim = CurvedAnimation(parent: _previewCtrl, curve: Curves.easeOutBack);
+    _previewCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+    _previewAnim =
+        CurvedAnimation(parent: _previewCtrl, curve: Curves.easeOutBack);
   }
 
   @override
@@ -39,7 +40,7 @@ class _CreateCardScreenState extends State<CreateCardScreen>
     super.dispose();
   }
 
-  Deck get _selectedDeck => MockData.decks[_selectedDeckIndex];
+  Deck get _selectedDeck => StudyData.decks[_selectedDeckIndex];
   Color get _deckColor =>
       AppTheme.deckColors[_selectedDeck.colorIndex % AppTheme.deckColors.length];
 
@@ -76,7 +77,7 @@ class _CreateCardScreenState extends State<CreateCardScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('Card added! 🎉',
+                  const Text('Card added!',
                       style: TextStyle(
                           fontWeight: FontWeight.w700, fontSize: 14)),
                   Text('Added to "${_selectedDeck.name}"',
@@ -88,7 +89,8 @@ class _CreateCardScreenState extends State<CreateCardScreen>
         ),
         backgroundColor: AppTheme.primary,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         duration: const Duration(seconds: 3),
       ),
     );
@@ -122,7 +124,7 @@ class _CreateCardScreenState extends State<CreateCardScreen>
                     label: 'Front (Question)',
                     hint: 'What is the powerhouse of the cell?',
                     icon: Icons.help_outline_rounded,
-                    color: AppTheme.primary,
+                    color: _deckColor,
                     maxLines: 3,
                   ),
                   const SizedBox(height: 16),
@@ -150,8 +152,7 @@ class _CreateCardScreenState extends State<CreateCardScreen>
                   if (_showPreview) ...[
                     const SizedBox(height: 16),
                     ScaleTransition(
-                        scale: _previewAnim,
-                        child: _buildPreviewCard()),
+                        scale: _previewAnim, child: _buildPreviewCard()),
                   ],
                   const SizedBox(height: 32),
                   _buildCreateButton(),
@@ -167,19 +168,20 @@ class _CreateCardScreenState extends State<CreateCardScreen>
 
   SliverAppBar _buildAppBar() {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: 110,
       collapsedHeight: 60,
       pinned: true,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppTheme.primary,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          decoration: BoxDecoration(gradient: AppTheme.heroGradient),
+          color: AppTheme.primary,
           padding: const EdgeInsets.fromLTRB(24, 56, 24, 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Icon(Icons.add_card_rounded, color: Colors.white, size: 28),
+              Icon(Icons.add_card_rounded,
+                  color: AppTheme.accent, size: 26),
               const SizedBox(width: 10),
               const Column(
                 mainAxisSize: MainAxisSize.min,
@@ -188,19 +190,15 @@ class _CreateCardScreenState extends State<CreateCardScreen>
                   Text('Create Card',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 22,
                           fontWeight: FontWeight.w900)),
                   Text('Add a new flashcard',
-                      style: TextStyle(color: Colors.white70, fontSize: 13)),
+                      style: TextStyle(color: Colors.white54, fontSize: 13)),
                 ],
               ),
             ],
           ),
         ),
-        title: const Text('Create Card',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
-        titlePadding: const EdgeInsets.only(left: 56, bottom: 14),
       ),
     );
   }
@@ -219,25 +217,26 @@ class _CreateCardScreenState extends State<CreateCardScreen>
           height: 44,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: MockData.decks.length,
+            itemCount: StudyData.decks.length,
             separatorBuilder: (_, __) => const SizedBox(width: 8),
             itemBuilder: (_, i) {
-              final deck = MockData.decks[i];
-              final color =
-                  AppTheme.deckColors[deck.colorIndex % AppTheme.deckColors.length];
+              final deck = StudyData.decks[i];
+              final color = AppTheme
+                  .deckColors[deck.colorIndex % AppTheme.deckColors.length];
               final isSelected = _selectedDeckIndex == i;
 
               return GestureDetector(
                 onTap: () => setState(() => _selectedDeckIndex = i),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
                     color: isSelected ? color : AppTheme.cardBg,
                     borderRadius: BorderRadius.circular(22),
                     border: Border.all(
-                        color: isSelected ? color : AppTheme.divider, width: 1.5),
-                    boxShadow: isSelected ? [AppTheme.cardShadow] : [],
+                        color: isSelected ? color : AppTheme.divider,
+                        width: 1.5),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -246,8 +245,9 @@ class _CreateCardScreenState extends State<CreateCardScreen>
                       const SizedBox(width: 6),
                       Text(deck.name,
                           style: TextStyle(
-                              color:
-                                  isSelected ? Colors.white : AppTheme.textSecondary,
+                              color: isSelected
+                                  ? Colors.white
+                                  : AppTheme.textSecondary,
                               fontWeight: FontWeight.w700,
                               fontSize: 12)),
                     ],
@@ -289,23 +289,27 @@ class _CreateCardScreenState extends State<CreateCardScreen>
           maxLines: maxLines,
           onChanged: (_) => setState(() {}),
           style: const TextStyle(
-              fontWeight: FontWeight.w500, fontSize: 14, color: AppTheme.textPrimary),
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              color: AppTheme.textPrimary),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+            hintStyle:
+                const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
             filled: true,
             fillColor: AppTheme.cardBg,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: AppTheme.divider),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: AppTheme.divider),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: color, width: 1.5),
             ),
           ),
@@ -339,7 +343,8 @@ class _CreateCardScreenState extends State<CreateCardScreen>
               icon: Icons.sentiment_neutral_rounded,
               color: AppTheme.accent,
               isSelected: _difficulty == CardDifficulty.medium,
-              onTap: () => setState(() => _difficulty = CardDifficulty.medium),
+              onTap: () =>
+                  setState(() => _difficulty = CardDifficulty.medium),
             ),
             const SizedBox(width: 10),
             _DiffChip(
@@ -361,9 +366,9 @@ class _CreateCardScreenState extends State<CreateCardScreen>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: _deckColor.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: _deckColor.withOpacity(0.3)),
+          color: _deckColor.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: _deckColor.withOpacity(0.2)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -397,8 +402,7 @@ class _CreateCardScreenState extends State<CreateCardScreen>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppTheme.cardBg,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [AppTheme.cardShadow],
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.divider),
       ),
       child: Column(
@@ -407,9 +411,10 @@ class _CreateCardScreenState extends State<CreateCardScreen>
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                    color: _deckColor.withOpacity(0.12),
+                    color: _deckColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20)),
                 child: Text('FRONT',
                     style: TextStyle(
@@ -431,28 +436,27 @@ class _CreateCardScreenState extends State<CreateCardScreen>
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 15,
-              color: hasContent ? AppTheme.textPrimary : AppTheme.textSecondary,
+              color: hasContent
+                  ? AppTheme.textPrimary
+                  : AppTheme.textSecondary,
               fontStyle: hasContent ? FontStyle.normal : FontStyle.italic,
             ),
           ),
           const SizedBox(height: 16),
           const Divider(color: AppTheme.divider),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                    color: AppTheme.secondary.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(20)),
-                child: const Text('BACK',
-                    style: TextStyle(
-                        color: AppTheme.secondary,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.2)),
-              ),
-            ],
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+                color: AppTheme.secondary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20)),
+            child: const Text('BACK',
+                style: TextStyle(
+                    color: AppTheme.secondary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2)),
           ),
           const SizedBox(height: 10),
           Text(
@@ -487,8 +491,9 @@ class _CreateCardScreenState extends State<CreateCardScreen>
           disabledBackgroundColor: AppTheme.divider,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 18),
+          elevation: 0,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
       ),
     );
