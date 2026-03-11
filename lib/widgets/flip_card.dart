@@ -110,18 +110,15 @@ class _FlipCardState extends State<FlipCard>
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppTheme.cardBg,
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: widget.color.withOpacity(0.2), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: widget.color.withOpacity(0.2),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
+            color: widget.color.withOpacity(0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(
-          color: widget.color.withOpacity(0.2),
-          width: 1.5,
-        ),
       ),
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -131,11 +128,11 @@ class _FlipCardState extends State<FlipCard>
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: widget.color.withOpacity(0.12),
+              color: widget.color.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.question_mark_rounded,
-                color: widget.color, size: 26),
+            child: Icon(Icons.help_outline_rounded,
+                color: widget.color, size: 24),
           ),
           const SizedBox(height: 24),
           Text(
@@ -155,7 +152,7 @@ class _FlipCardState extends State<FlipCard>
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: AppTheme.surface,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -180,7 +177,7 @@ class _FlipCardState extends State<FlipCard>
           Text(
             'Tap to reveal answer',
             style: TextStyle(
-              color: widget.color.withOpacity(0.6),
+              color: widget.color.withOpacity(0.5),
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -194,17 +191,13 @@ class _FlipCardState extends State<FlipCard>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [widget.color, widget.color.withOpacity(0.8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(28),
+        color: widget.color,
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: widget.color.withOpacity(0.35),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
+            color: widget.color.withOpacity(0.2),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -216,11 +209,11 @@ class _FlipCardState extends State<FlipCard>
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withOpacity(0.15),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.check_rounded,
-                color: Colors.white, size: 26),
+                color: Colors.white, size: 24),
           ),
           const SizedBox(height: 24),
           Text(
@@ -237,7 +230,7 @@ class _FlipCardState extends State<FlipCard>
           Text(
             'Tap to flip back',
             style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withOpacity(0.5),
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
